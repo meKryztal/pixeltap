@@ -12,10 +12,61 @@
 
 
 # Установка:
+1. Установить python (Протестировано на 3.11)
+
+2. Зайти в cmd и вписывать
+   ```
+   git clone https://github.com/meKryztal/pixeltap.git
+   ```
+   ```
+   cd pixelverse
+   ```
+4. Установить модули
+   
    ```
    pip install -r requirements.txt
    ```
 
+   или
+
+   ```
+   python -m pip install -r requirements.txt
+   ```
+   
+   или
+   
+   ```
+   pip3 install -r requirements.txt
+   ```
+
+   или
+
+   ```
+   python3 -m pip install -r requirements.txt
+   ```
+
+6. Запуск
+   Без рандомных комбо
+   ```
+   python NotRandomCombo.py
+   ```
+
+   или
+
+   ```
+   python3 NotRandomCombo.py
+   ```
+   С рандомными комбо
+   
+   ```
+   python tre11t.py
+   ```
+
+   или
+
+   ```
+   python3 tre11t.py
+   ```
 Вставить в файл initdata ключи такого вида, каждый новый ключ с новой строки:
    ```
    query_id=xxxxxxxxxx&user=xxxxxxfirst_namexxxxxlast_namexxxxxxxusernamexxxxxxxlanguage_codexxxxxxxallows_write_to_pmxxxxxxx&auth_date=xxxxxx&hash=xxxxxxx
