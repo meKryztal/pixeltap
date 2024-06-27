@@ -19,7 +19,7 @@
    git clone https://github.com/meKryztal/pixeltap.git
    ```
    ```
-   cd pixelverse
+   cd pixeltap
    ```
 3. Установить модули
    
