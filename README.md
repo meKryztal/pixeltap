@@ -7,7 +7,7 @@
 -  Работа по ключу, без авторизации
 -  Сам улучшает питомцев
 -  Сам покупает новых питомцев
--  Выбирает рандомно 4 питомца в комбо
+-  Делает комбо
 
 
 
@@ -27,3 +27,30 @@
 # Как получить query_id:
 Заходите в telegram web, открываете бота, жмете F12 и переходите в Network, жмете в боте Fight for supply и devtool ищете запрос с именем heath (Их будет два, вам нужен у которого Status Code: 200 OK), в правой колонке находите initdata: query_id=бла бла бла
 ![photo_2024-06-27_23-48-24](https://github.com/meKryztal/pixeltap/assets/47853767/9abd5c91-2acd-4991-b458-0b11c43f37fc)
+
+# Рандомные комбо, то запускать tre11t.py
+# Если не хотите рандомные комбо, то запускать NotRandomCombo.py
+
+# Pet List
+| Номер                               | Питомец                                                    |
+| ---------------------------------- | ------------------------------------------------------------- |
+| 1 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717749670570_1.png" width="100" height="100"> |
+| 2 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717753602725_black_puma.png" width="100" height="100"> |
+| 3 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717750211798_19.png" width="100" height="100"> |
+| 4 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717750211795_16.png" width="100" height="100"> |
+| 5 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717750072415_13.png" width="100" height="100"> |
+| 6 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717750072416_15.png" width="100" height="100"> |
+| 7 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717749670581_5.png" width="100" height="100"> |
+| 8 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717749762365_8.png" width="100" height="100"> |
+| 9 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717749670580_4.png" width="100" height="100"> |
+| 10 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717750072415_14.png" width="100" height="100"> |
+| 11 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717750072412_11.png" width="100" height="100"> |
+| 12 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717750072414_12.png" width="100" height="100"> |
+| 13 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717750211797_18.png" width="100" height="100"> |
+| 14 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717749762363_6.png" width="100" height="100"> |
+| 15 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717749762367_10.png" width="100" height="100"> |
+| 16 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717750211796_17.png" width="100" height="100"> |
+| 17 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717749670578_2.png" width="100" height="100"> |
+| 18 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717749670579_3.png" width="100" height="100"> |
+| 19 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717749762364_7.png" width="100" height="100"> |
+| 20 | <img src="https://storage.googleapis.com/pixelverse-dev.appspot.com/1717749762366_9.png" width="100" height="100"> |
