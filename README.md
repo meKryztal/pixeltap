@@ -21,7 +21,7 @@
    ```
    cd pixelverse
    ```
-4. Установить модули
+3. Установить модули
    
    ```
    pip install -r requirements.txt
@@ -45,7 +45,7 @@
    python3 -m pip install -r requirements.txt
    ```
 
-6. Запуск
+4. Запуск
    Без рандомных комбо
    ```
    python NotRandomCombo.py
@@ -67,6 +67,8 @@
    ```
    python3 tre11t.py
    ```
+
+   
 Вставить в файл initdata ключи такого вида, каждый новый ключ с новой строки:
    ```
    query_id=xxxxxxxxxx&user=xxxxxxfirst_namexxxxxlast_namexxxxxxxusernamexxxxxxxlanguage_codexxxxxxxallows_write_to_pmxxxxxxx&auth_date=xxxxxx&hash=xxxxxxx
