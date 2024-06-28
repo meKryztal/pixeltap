@@ -7,7 +7,7 @@ import requests
 from datetime import datetime
 from colorama import *
 from urllib.parse import unquote
-import random
+
 
 init(autoreset=True)
 
@@ -95,7 +95,7 @@ class PixelTod:
                 self.countdown(self.INTERVAL_DELAY)
             self.countdown(self.DEFAULT_COUNTDOWN)
 
-    def process_account(self, data):
+    def process_account(self, data, id_pets):
         self.get_me(data)
         self.daily_reward(data)
         self.get_mining_proccess(data)
