@@ -249,7 +249,7 @@ class PixelTod:
 
                     if res_upgrade.status_code == 200 or res_upgrade.status_code == 201:
                         self.log(f'{Fore.LIGHTYELLOW_EX}Улучшил питомца: {Fore.LIGHTWHITE_EX}{pet_name} Lv.{pet["userPet"]["level"]}')
-                        time.sleep(2)
+                        time.sleep(3)
                     else:
                         error_message = res_upgrade.json().get('message', 'Unknown error')
                         self.log(f'{Fore.LIGHTRED_EX}Не удалось улучшить питомца: {pet_name}, Ответ: {error_message}')
