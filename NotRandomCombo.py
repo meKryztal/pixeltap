@@ -52,29 +52,30 @@ class PixelTod:
             self.log(f'{Fore.LIGHTYELLOW_EX}Пожалуйста, введите свои данные в initdata.txt')
             sys.exit()
         id_map = {
-            "1": "0a6306e5-cc33-401a-9664-a872e3eb2b71",
-            "2": "571523ae-872d-49f0-aa71-53d4a41cd810",
-            "3": "78e0146f-0dfb-4af8-a48d-4033d3efdd39",
-            "4": "7c3a95c6-75a3-4c62-a20e-896a21132060",
-            "5": "8074e9c5-f6c2-4012-bfa2-bcc98ceb5175",
-            "6": "d364254e-f22f-4a43-9a1c-5a7c71ea9ecd",
-            "7": "dc5236dc-06be-456b-a311-cccedbd213ca",
-            "8": "e8c505ed-df93-47e0-bd2e-0e664d09ba86",
-            "9": "ef0adeca-be18-4503-9e9a-d93c22bd7a6e",
-            "10": "f097634a-c8e8-4de9-b707-575d20c5fd88",
-            "11": "50e9e942-36d5-4f19-9bb7-c892cb956fff",
-            "12": "7ee9ed52-c808-4187-a942-b53d972cd399",
-            "13": "36621a17-81f3-4d5d-b4e1-4b0cf51d4610",
-            "14": "90a07a32-431a-4299-be59-598180ee4a8c",
-            "15": "45f2e16e-fb64-4e15-a3fa-2fb99c8d4a04",
-            "16": "3bfab57c-a57f-48d9-8819-c93c9f531478",
-            "17": "341195b4-f7d8-4b9c-a8f1-448318f32e8e",
-            "18": "bc3f938f-8f4c-467b-a57d-2b40cd500f4b",
-            "19": "f82a3b59-913d-4c57-8ffd-9ac954105e2d",
-            "20": "d59cd843-1b53-4131-9966-641d41aa634b"
+            "1":"0a6306e5-cc33-401a-9664-a872e3eb2b71",
+            "2":"571523ae-872d-49f0-aa71-53d4a41cd810",
+            "3":"78e0146f-0dfb-4af8-a48d-4033d3efdd39",
+            "4":"7c3a95c6-75a3-4c62-a20e-896a21132060",
+            "5":"8074e9c5-f6c2-4012-bfa2-bcc98ceb5175",
+            "6":"d364254e-f22f-4a43-9a1c-5a7c71ea9ecd",
+            "7":"dc5236dc-06be-456b-a311-cccedbd213ca",
+            "8":"e8c505ed-df93-47e0-bd2e-0e664d09ba86",
+            "9":"ef0adeca-be18-4503-9e9a-d93c22bd7a6e",
+            "10":"f097634a-c8e8-4de9-b707-575d20c5fd88",
+            "11":"50e9e942-36d5-4f19-9bb7-c892cb956fff",
+            "12":"7ee9ed52-c808-4187-a942-b53d972cd399",
+            "13":"36621a17-81f3-4d5d-b4e1-4b0cf51d4610",
+            "14":"90a07a32-431a-4299-be59-598180ee4a8c",
+            "15":"45f2e16e-fb64-4e15-a3fa-2fb99c8d4a04",
+            "16":"3bfab57c-a57f-48d9-8819-c93c9f531478",
+            "17":"341195b4-f7d8-4b9c-a8f1-448318f32e8e",
+            "18":"bc3f938f-8f4c-467b-a57d-2b40cd500f4b",
+            "19":"f82a3b59-913d-4c57-8ffd-9ac954105e2d",
+            "20":"d59cd843-1b53-4131-9966-641d41aa634b",
         }
 
         id_pets_input = input("Введи комбо: (Пример: 1,2,3,4)\n").strip().split(',')
+        id_pets_input.reverse()
         id_pets = [id_map[num.strip()] for num in id_pets_input]
         print('-' * 50)
         while True:
@@ -286,7 +287,8 @@ class PixelTod:
                     try:
                         answer_data = res_answer.json()
                         reward_amount = answer_data.get('rewardAmount', 'N/A')
-                        self.log(f'{Fore.LIGHTYELLOW_EX}Успешно запросил комбо: {Fore.LIGHTWHITE_EX}{reward_amount}')
+                        reward_Percent = answer_data.get('rewardPercent', 'N/A')
+                        self.log(f'{Fore.LIGHTYELLOW_EX}Успешно запросил комбо: {Fore.LIGHTWHITE_EX}{reward_amount} {Fore.LIGHTYELLOW_EX}{reward_Percent}%')
                     except json.JSONDecodeError:
                         self.log(f'{Fore.LIGHTRED_EX}Не удалось декодировать JSON-ответ от API запроса комбо.')
                 else:
