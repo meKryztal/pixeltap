@@ -100,9 +100,10 @@ class PixelTod:
         self.get_me(data)
         self.daily_reward(data)
         self.get_mining_proccess(data)
+        self.daily_combo(data, id_pets)
         self.auto_buy_pet(data)
         self.auto_upgrade_pet(data)
-        self.daily_combo(data, id_pets)
+ 
 
     def countdown(self, t):
         while t:
@@ -314,7 +315,7 @@ class PixelTod:
         print(f"{Fore.LIGHTBLACK_EX}[{now}]{Style.RESET_ALL} {message}")
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     try:
         app = PixelTod()
         app.main()
