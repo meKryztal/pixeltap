@@ -7,7 +7,7 @@ import requests
 from datetime import datetime
 from colorama import *
 from urllib.parse import unquote
-import random
+
 
 init(autoreset=True)
 
@@ -51,7 +51,32 @@ class PixelTod:
         if not datas:
             self.log(f'{Fore.LIGHTYELLOW_EX}Пожалуйста, введите свои данные в initdata.txt')
             sys.exit()
+        id_map = {
+            "1":"0a6306e5-cc33-401a-9664-a872e3eb2b71",
+            "2":"571523ae-872d-49f0-aa71-53d4a41cd810",
+            "3":"78e0146f-0dfb-4af8-a48d-4033d3efdd39",
+            "4":"7c3a95c6-75a3-4c62-a20e-896a21132060",
+            "5":"8074e9c5-f6c2-4012-bfa2-bcc98ceb5175",
+            "6":"d364254e-f22f-4a43-9a1c-5a7c71ea9ecd",
+            "7":"dc5236dc-06be-456b-a311-cccedbd213ca",
+            "8":"e8c505ed-df93-47e0-bd2e-0e664d09ba86",
+            "9":"ef0adeca-be18-4503-9e9a-d93c22bd7a6e",
+            "10":"f097634a-c8e8-4de9-b707-575d20c5fd88",
+            "11":"50e9e942-36d5-4f19-9bb7-c892cb956fff",
+            "12":"7ee9ed52-c808-4187-a942-b53d972cd399",
+            "13":"36621a17-81f3-4d5d-b4e1-4b0cf51d4610",
+            "14":"90a07a32-431a-4299-be59-598180ee4a8c",
+            "15":"45f2e16e-fb64-4e15-a3fa-2fb99c8d4a04",
+            "16":"3bfab57c-a57f-48d9-8819-c93c9f531478",
+            "17":"341195b4-f7d8-4b9c-a8f1-448318f32e8e",
+            "18":"bc3f938f-8f4c-467b-a57d-2b40cd500f4b",
+            "19":"f82a3b59-913d-4c57-8ffd-9ac954105e2d",
+            "20":"d59cd843-1b53-4131-9966-641d41aa634b",
+        }
 
+        id_pets_input = input("Введи комбо: (Пример: 1,2,3,4)\n").strip().split(',')
+        id_pets_input.reverse()
+        id_pets = [id_map[num.strip()] for num in id_pets_input]
         print('-' * 50)
         while True:
             for no, data in enumerate(datas):
@@ -66,18 +91,19 @@ class PixelTod:
                 self.log(f'{Fore.LIGHTYELLOW_EX}Аккаунт: {Fore.LIGHTWHITE_EX}{first_name} {last_name}')
                 secret = self.get_secret(userid)
                 new_data = Data(data, userid, username, secret)
-                self.process_account(new_data)
+                self.process_account(new_data, id_pets)
                 print('-' * 50)
                 self.countdown(self.INTERVAL_DELAY)
             self.countdown(self.DEFAULT_COUNTDOWN)
 
-    def process_account(self, data):
+    def process_account(self, data, id_pets):
         self.get_me(data)
+        self.get_spin(data)
         self.daily_reward(data)
         self.get_mining_proccess(data)
         self.auto_buy_pet(data)
         self.auto_upgrade_pet(data)
-        self.daily_combo(data)
+        self.daily_combo(data, id_pets)
 
     def countdown(self, t):
         while t:
@@ -124,6 +150,62 @@ class PixelTod:
             self.log(f'{Fore.LIGHTYELLOW_EX}Общий баланс: {Fore.LIGHTWHITE_EX}{balance}')
         except json.JSONDecodeError:
             self.log(f'{Fore.LIGHTRED_EX}Не удалось декодировать JSON-ответ от API get_me. Ответ: {res.text}')
+
+    def get_spin(self, data):
+        url = 'https://api-clicker.pixelverse.xyz/api/roulette'
+        headers = self.prepare_headers(data)
+
+        prize_mapping = {
+            'boosts.daily-income-x2.one-day.name': 'Дневной доход х2',
+            'boosts.daily-income-x3.one-day.name': 'Дневной доход х3',
+            'boosts.daily-income-x5.one-day.name': 'Дневной доход х5',
+            'lottery.prize.battle-super-power-double-hit.name': 'Суперсила - двойной удар',
+            'lottery.prize.battle-super-power-freeze.name': 'Суперсила - заморозка',
+            'lottery.prize.battle-super-power-heal.name': 'Суперсила - исцеление',
+            'lottery.prize.battle-super-power-poison.name': 'Суперсила - яд',
+            'lottery.prize.battle-super-power-shield.name': 'Суперсила - щит',
+            'lottery.prize.boost-x2-1day.name': 'Дневной доход х2',
+            'lottery.prize.boost-x3-1day.name': 'Дневной доход х3',
+            'lottery.prize.boost-x5-1day.name': 'Дневной доход х5',
+            'lottery.prize.relative-coins-10-percents.name': 'Монеты 10%',
+            'lottery.prize.relative-coins-100-percents.name': 'Монеты 100%'
+        }
+
+        while True:
+            res = self.api_call(url, None, headers)
+            if not res.text:
+                self.log(f'{Fore.LIGHTRED_EX}Пустой ответ от API спинов.')
+                return
+
+            try:
+                response_json = res.json()
+
+                Spins = response_json.get('mySpinsAmount', 'N/A')
+
+            except json.JSONDecodeError:
+                self.log(f'{Fore.LIGHTRED_EX}Не удалось декодировать JSON-ответ от API спина. Ответ: {res.text}')
+                return
+
+            if response_json.get('mySpinsAmount', 0) > 0:
+                self.log(f'{Fore.LIGHTYELLOW_EX}Спинов: {Fore.LIGHTWHITE_EX}{Spins}')
+                self.log(f'{Fore.LIGHTYELLOW_EX}Вращаю барабан!')
+                url_spin = 'https://api-clicker.pixelverse.xyz/api/roulette/spin'
+                res = self.api_call(url_spin, '', headers, method='POST')
+
+                if not res.text:
+                    self.log(f'{Fore.LIGHTRED_EX}Пустой ответ от API на запрос спина.')
+                    return
+                try:
+                    spin_response = res.json()
+                    prize_key = spin_response.get('name', 'N/A')
+                    prize = prize_mapping.get(prize_key, prize_key)
+                    self.log(f'{Fore.LIGHTYELLOW_EX}Выиграш: {Fore.LIGHTWHITE_EX}{prize}')
+                except json.JSONDecodeError:
+                    self.log(
+                        f'{Fore.LIGHTRED_EX}Не удалось декодировать JSON-ответ от API на запрос спинов. Ответ: {res.text}')
+            else:
+                self.log(f'{Fore.LIGHTRED_EX}Нету спинов!')
+                break
 
     def daily_reward(self, data: Data):
         url = 'https://api-clicker.pixelverse.xyz/api/daily-rewards'
@@ -205,14 +287,16 @@ class PixelTod:
             except json.JSONDecodeError:
                 self.log(f'{Fore.LIGHTRED_EX}Не удалось декодировать JSON-ответ от API покупки питомца.')
         else:
-            self.log(f'{Fore.LIGHTRED_EX}Еще не прошел кулдаун покупки нового питомца.')
+            self.log(f'{Fore.LIGHTRED_EX}Еще не прошел кулдаун покупки нового питомца или не хватает монет.')
 
     def auto_upgrade_pet(self, data: Data):
         url = 'https://api-clicker.pixelverse.xyz/api/pets'
         headers = self.prepare_headers(data)
         res = self.api_call(url, None, headers)
         pets = res.json().get('data', [])
-
+        pets_mapping = {
+            'Insufficient points amount': 'Не хватает монет',
+        }
         if pets:
             while True:
                 pets_sorted = sorted(pets, key=lambda pet: pet['userPet']['level'])
@@ -228,7 +312,8 @@ class PixelTod:
                         time.sleep(3)
                     else:
                         error_message = res_upgrade.json().get('message', 'Unknown error')
-                        self.log(f'{Fore.LIGHTRED_EX}Не удалось улучшить питомца: {pet_name}, Ответ: {error_message}')
+                        eroor = pets_mapping.get(error_message, error_message)
+                        self.log(f'{Fore.LIGHTRED_EX}Не удалось улучшить питомца: {pet_name}, Ответ: {eroor}')
                         return
 
                     res = self.api_call(url, None, headers)
@@ -237,32 +322,7 @@ class PixelTod:
         else:
             self.log(f'{Fore.LIGHTRED_EX}Нету питомцев для улучшения')
 
-    def daily_combo(self, data: Data):
-        id_pets_list = [
-            "0a6306e5-cc33-401a-9664-a872e3eb2b71",
-            "571523ae-872d-49f0-aa71-53d4a41cd810",
-            "78e0146f-0dfb-4af8-a48d-4033d3efdd39",
-            "7c3a95c6-75a3-4c62-a20e-896a21132060",
-            "8074e9c5-f6c2-4012-bfa2-bcc98ceb5175",
-            "d364254e-f22f-4a43-9a1c-5a7c71ea9ecd",
-            "dc5236dc-06be-456b-a311-cccedbd213ca",
-            "e8c505ed-df93-47e0-bd2e-0e664d09ba86",
-            "ef0adeca-be18-4503-9e9a-d93c22bd7a6e",
-            "f097634a-c8e8-4de9-b707-575d20c5fd88",
-            "50e9e942-36d5-4f19-9bb7-c892cb956fff",
-            "7ee9ed52-c808-4187-a942-b53d972cd399",
-            "36621a17-81f3-4d5d-b4e1-4b0cf51d4610",
-            "90a07a32-431a-4299-be59-598180ee4a8c",
-            "45f2e16e-fb64-4e15-a3fa-2fb99c8d4a04",
-            "3bfab57c-a57f-48d9-8819-c93c9f531478",
-            "341195b4-f7d8-4b9c-a8f1-448318f32e8e",
-            "bc3f938f-8f4c-467b-a57d-2b40cd500f4b",
-            "f82a3b59-913d-4c57-8ffd-9ac954105e2d",
-            "d59cd843-1b53-4131-9966-641d41aa634b"
-        ]
-
-        id_pets = random.sample(id_pets_list, 4)
-
+    def daily_combo(self, data: Data, id_pets):
         url_current_game = "https://api-clicker.pixelverse.xyz/api/cypher-games/current"
         headers = self.prepare_headers(data)
         res_current_game = self.api_call(url_current_game, None, headers)
@@ -287,7 +347,8 @@ class PixelTod:
                     try:
                         answer_data = res_answer.json()
                         reward_amount = answer_data.get('rewardAmount', 'N/A')
-                        self.log(f'{Fore.LIGHTYELLOW_EX}Успешно запросил комбо: {Fore.LIGHTWHITE_EX}{reward_amount}')
+                        reward_Percent = answer_data.get('rewardPercent', 'N/A')
+                        self.log(f'{Fore.LIGHTYELLOW_EX}Успешно запросил комбо: {Fore.LIGHTWHITE_EX}{reward_amount} {Fore.LIGHTYELLOW_EX}{reward_Percent}%')
                     except json.JSONDecodeError:
                         self.log(f'{Fore.LIGHTRED_EX}Не удалось декодировать JSON-ответ от API запроса комбо.')
                 else:
