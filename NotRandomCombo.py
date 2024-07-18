@@ -98,12 +98,12 @@ class PixelTod:
 
     def process_account(self, data, id_pets):
         self.get_me(data)
+        self.get_spin(data)
         self.daily_reward(data)
         self.get_mining_proccess(data)
-        self.daily_combo(data, id_pets)
         self.auto_buy_pet(data)
         self.auto_upgrade_pet(data)
- 
+        self.daily_combo(data, id_pets)
 
     def countdown(self, t):
         while t:
@@ -150,6 +150,62 @@ class PixelTod:
             self.log(f'{Fore.LIGHTYELLOW_EX}Общий баланс: {Fore.LIGHTWHITE_EX}{balance}')
         except json.JSONDecodeError:
             self.log(f'{Fore.LIGHTRED_EX}Не удалось декодировать JSON-ответ от API get_me. Ответ: {res.text}')
+
+    def get_spin(self, data):
+        url = 'https://api-clicker.pixelverse.xyz/api/roulette'
+        headers = self.prepare_headers(data)
+
+        prize_mapping = {
+            'boosts.daily-income-x2.one-day.name': 'Дневной доход х2',
+            'boosts.daily-income-x3.one-day.name': 'Дневной доход х3',
+            'boosts.daily-income-x5.one-day.name': 'Дневной доход х5',
+            'lottery.prize.battle-super-power-double-hit.name': 'Суперсила - двойной удар',
+            'lottery.prize.battle-super-power-freeze.name': 'Суперсила - заморозка',
+            'lottery.prize.battle-super-power-heal.name': 'Суперсила - исцеление',
+            'lottery.prize.battle-super-power-poison.name': 'Суперсила - яд',
+            'lottery.prize.battle-super-power-shield.name': 'Суперсила - щит',
+            'lottery.prize.boost-x2-1day.name': 'Дневной доход х2',
+            'lottery.prize.boost-x3-1day.name': 'Дневной доход х3',
+            'lottery.prize.boost-x5-1day.name': 'Дневной доход х5',
+            'lottery.prize.relative-coins-10-percents.name': 'Монеты 10%',
+            'lottery.prize.relative-coins-100-percents.name': 'Монеты 100%'
+        }
+
+        while True:
+            res = self.api_call(url, None, headers)
+            if not res.text:
+                self.log(f'{Fore.LIGHTRED_EX}Пустой ответ от API спинов.')
+                return
+
+            try:
+                response_json = res.json()
+
+                Spins = response_json.get('mySpinsAmount', 'N/A')
+
+            except json.JSONDecodeError:
+                self.log(f'{Fore.LIGHTRED_EX}Не удалось декодировать JSON-ответ от API спина. Ответ: {res.text}')
+                return
+
+            if response_json.get('mySpinsAmount', 0) > 0:
+                self.log(f'{Fore.LIGHTYELLOW_EX}Спинов: {Fore.LIGHTWHITE_EX}{Spins}')
+                self.log(f'{Fore.LIGHTYELLOW_EX}Вращаю барабан!')
+                url_spin = 'https://api-clicker.pixelverse.xyz/api/roulette/spin'
+                res = self.api_call(url_spin, '', headers, method='POST')
+
+                if not res.text:
+                    self.log(f'{Fore.LIGHTRED_EX}Пустой ответ от API на запрос спина.')
+                    return
+                try:
+                    spin_response = res.json()
+                    prize_key = spin_response.get('name', 'N/A')
+                    prize = prize_mapping.get(prize_key, prize_key)
+                    self.log(f'{Fore.LIGHTYELLOW_EX}Выиграш: {Fore.LIGHTWHITE_EX}{prize}')
+                except json.JSONDecodeError:
+                    self.log(
+                        f'{Fore.LIGHTRED_EX}Не удалось декодировать JSON-ответ от API на запрос спинов. Ответ: {res.text}')
+            else:
+                self.log(f'{Fore.LIGHTRED_EX}Нету спинов!')
+                break
 
     def daily_reward(self, data: Data):
         url = 'https://api-clicker.pixelverse.xyz/api/daily-rewards'
@@ -231,14 +287,16 @@ class PixelTod:
             except json.JSONDecodeError:
                 self.log(f'{Fore.LIGHTRED_EX}Не удалось декодировать JSON-ответ от API покупки питомца.')
         else:
-            self.log(f'{Fore.LIGHTRED_EX}Еще не прошел кулдаун покупки нового питомца.')
+            self.log(f'{Fore.LIGHTRED_EX}Еще не прошел кулдаун покупки нового питомца или не хватает монет.')
 
     def auto_upgrade_pet(self, data: Data):
         url = 'https://api-clicker.pixelverse.xyz/api/pets'
         headers = self.prepare_headers(data)
         res = self.api_call(url, None, headers)
         pets = res.json().get('data', [])
-
+        pets_mapping = {
+            'Insufficient points amount': 'Не хватает монет',
+        }
         if pets:
             while True:
                 pets_sorted = sorted(pets, key=lambda pet: pet['userPet']['level'])
@@ -254,7 +312,8 @@ class PixelTod:
                         time.sleep(3)
                     else:
                         error_message = res_upgrade.json().get('message', 'Unknown error')
-                        self.log(f'{Fore.LIGHTRED_EX}Не удалось улучшить питомца: {pet_name}, Ответ: {error_message}')
+                        eroor = pets_mapping.get(error_message, error_message)
+                        self.log(f'{Fore.LIGHTRED_EX}Не удалось улучшить питомца: {pet_name}, Ответ: {eroor}')
                         return
 
                     res = self.api_call(url, None, headers)
@@ -315,7 +374,7 @@ class PixelTod:
         print(f"{Fore.LIGHTBLACK_EX}[{now}]{Style.RESET_ALL} {message}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         app = PixelTod()
         app.main()
