@@ -1,5 +1,5 @@
 # Автофарм Pixel tap
-![photo_2024-06-27_23-48-21](https://github.com/meKryztal/pixeltap/assets/47853767/bd470927-bf60-4375-b4f2-13acc5f46d0a)
+![photo_2024-07-18_20-29-20](https://github.com/user-attachments/assets/698bf80f-741f-4396-94e9-c8bf14fd6781)
 
 -  Клеймит каждые 7 часов поинты, можно изменить, в коде есть комментарий
 -  Забирает дейли ревард
